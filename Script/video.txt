@@ -1,0 +1,181 @@
+792 259 486
+// Get resolution video:
+http://stackoverflow.com/questions/684015/how-can-i-get-the-resolution-width-and-height-for-a-video-file-from-a-linux-co
+
+a=$(ffprobe -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width input.mkv)
+size=${streams_stream_0_width}x${streams_stream_0_height}
+echo $size
+
+// Convert video to ts (No set bitrate)
+
+ffmpeg -y -i ABC.mp4 -r 25 -g 25 -c:a libfdk_aac -b:a 128k -c:v libx264 -preset veryfast -s 1280x720 -c:a libfdk_aac -vbsf h264_mp4toannexb -flags -global_header -f ssegment -segment_list ./test/ABC.m3u8 -segment_list_flags +live-cache -segment_time 5 ./test/ABC-6b%04d.ts
+// vtc9
+http://vtc9.tivi12h.net:1935/live/myStream/chunklist.m3u8?wowzasessionid=1
+http://14.161.5.88:1935/live/myStream/playlist.m3u8
+http://103.21.148.45:81/icomchannelvtc/smil:vtc9_adb_security.smil/chunklist_b628000_sleng.m3u8
+
+
+// Render
+
+ffmpeg input.mp4 -filter_complex "nullsrc=size=1920x1080 [vmain]: [0:v] setpts=PTS-STARTPTS, scale=in_w/2:in_h [vleft]; [0:v] setpts=PTS-STARTPTS, cropasin_w:in_h/2:x=1:y=270, scale=in_w/2:in_h [vright]: [mmain][vleft] overlay=shortest=1 [vidl]; [vidl][vright] overlay=shortest=1:x=960:y=270" -vcodec libx264 -profile:v high -level 4.0 -coder 1 -refs 3 -preset ultrafast -b:v 2680k -minrate 2680k -maxrate 2680k -bufsize Ok -c:a copy output.mp4
+
+// m3u8 to mp4
+
+
+ffmpeg -i list.m3u8 -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 file.mp4
+
+http://stackoverflow.com/questions/33108105/converting-an-hls-m3u8-to-mp4
+
+---
+// Video to TS (set bitrate)
+
+ffmpeg -y -i /usr/share/nginx/html/video.mp4 -r 25 -g 25 -c:a libfdk_aac -b:a 128k -c:v libx264 -preset veryfast -b:v 1600k -maxrate 1600k -bufsize 800k -s 640x360 -c:a libfdk_aac -vbsf h264_mp4toannexb -flags -global_header -f ssegment -segment_list /usr/share/nginx/html/video/file.m3u8 -segment_list_flags +live-cache -segment_time 5 /usr/share/nginx/html/video/file-%04d.ts
+
+---
+
+ffmpeg -i vlk2.webm -i lk2.webm -vf drawtext="fontfile=/root/test1/ARIAL.TTF: text='YouTube.com/VideosTongHop': fontcolor=white: fontsize=24: box=1: boxcolor=black@0.5: boxborderw=5: x=20: y=20" -c:v libx264 -s 1280x720 -c copy -map 0:0 -map 1:0 -shortest lk2.mp4
+
+
+// Mux video 
+Với MAP:
+Ở 1 video 0 là HÌNH, 1 là TIẾNG
+Ví dụ lấy HÌNH video 1, âm thanh video 2
+
+ffmpeg -i input_0.mp4 -i input_1.mp4 -c copy -map 0:0 -map 1:1 -shortest out.mp4
+// Âm thanh thì chỉ có 1 kênh 0
+
+// Crop video
+
+ffmpeg -i p3.mp4 -filter:v "crop=858:480" -s 1280x720 out.mp4
+// Giữa video 
+
+LIVE
+ffmpeg  -i demo.mp4 -y  -c:v libx264  -vprofile baseline -preset medium -x264opts level=41 -threads 4 -s 1280x720 -map 0:v -map 0:a:0  -c:a libfdk_aac -b:a 160000 -ac 2   -hls_time 10 -hls_list_size 6 -hls_wrap 18 -start_number 1 ./tmp/stream.m3u8
+
+
+ffmpeg -i input.mp4 -af "atempo=1.27,volume=1.6" -vf "hflip ,setpts=PTS/1.27,"crop=iw/2:ih/2",scale=1280:720,boxblur=1:1 [mv]; movie=90xanh.png [f1]; [mv][f1]overlay=0:0" -vcodec libx264 -pix_fmt yuv420p -r 30 -g 60 -b:v 2500k -acodec libmp3lame -b:a 128k -ar 44100 -preset ultrafast output.mp4
+
+
+ffmpeg -i input.mp4 -af "atempo=1.27,volume=1.6" -vf "hflip ,setpts=PTS/1.27,scale=1280:720,"crop=iw/2:ih/2",boxblur=1:1 [mv]; movie=90xanh.png[opacity=50%];[mv][opacity=50%]overlay=0:0" -vcodec libx264 -pix_fmt yuv420p -r 30 -g 60 -b:v 2500k -acodec libmp3lame -b:a 128k -ar 44100 -preset ultrafast -preset ultrafast output.mp4
+
+ngoài. https://www.reddit.com/
+http://www.4chan.org/
+https://www.quora.com/
+http://www.myvidster.com/
+https://www.buzzfeed.com/
+http://www.cinemahaven.com
+http://videosift.com/
+http://www.wonderhowto.com/
+còn tiếp các bác tự tìm hiểu nha.
+
+1.https://www.reddit.com/
+2.http://www.4chan.org/
+3.https://www.quora.com/
+4.http://www.myvidster.com/
+5.https://www.buzzfeed.com/
+6.http://www.cinemahaven.com
+7.http://videosift.com/
+8.http://www.wonderhowto.com/
+9.https://www.quora.com/
+10.https://www.reddit.com/
+http://www.stumbleupon.com/
+http://digg.com/submit
+https://delicious.com/
+http://www.yemle.com/
+http://www.stupidvideos.com/
+http://www.cheezburger.com/
+http://lemmino.deviantart.com/
+http://www.wikia.com/Wikia
+https://www.minds.com/
+http://vidstatsx.com/
+http://forum.bodybuilding.com/
+http://memebase.cheezburger.com/
+https://vine.co/
+http://www.funnyjunk.com/member
+http://linkis.com/
+https://huzzaz.com/
+http://www.disclose.tv/
+http://www.wykop.pl/
+http://www.break.com/
+https://onlywire.com/secure/networks
+http://www.metacafe.com/
+http://www.world-of- lucid-dreaming.com/forum/
+http://www.livejournal.com/
+https://www.instapaper.com/
+https://www.plurk.com/
+https://getpocket.com/
+http://www.skyrock.com/
+http://www.tagged.com/?loc=en_US
+https://www.xing.com/en
+https://tagloom.com/
+https://voat.co/v/
+http://www.f169bbs.com/bbs/news/
+http://www.fark.com/
+https://vid.me/
+http://www.thetoptens.com/
+http://newshustle.com/
+https://flipboard.com/@denharsh
+http://www.buzzfeed.com/post
+http://buzzfeed.tumblr.com/submit
+http://mashable.com/submit/
+http://gawker.com/370687/submit-a- story-to- gawkercom
+http://www.huffingtonpost.com/contact/
+http://boingboing.net/s/submitterator/
+http://www.upworthy.com/submit
+http://gawker.com/370687/submit-a- story-to- gawkercom
+http://www.humortimes.com/videos/1805-user- submitted-videos/submission- form/
+https://www.playbuzz.com/
+http://junkee.com/about
+http://www.worldstarhiphop.com/videos/vsent.php
+https://submit.gopro.com/
+http://devour.com/submit/
+http://www.itgetsbetter.org/page/s/submit-a- video
+http://newshustle.com/
+http://www.cabronazi.com/
+
+trang này lấy phim hoạt hình
+kisscartoon.me
+http://www.cartoonnetworkasia.com/
+trang này lấy show pháp
+topreplay.com
+trang này lấy show mỹ http://freeform.go.com/
+watchseries.ac http://www.watchseriesgo.to/link/allmyvideos.net/6058460
+
+0:10, 3:30, 7:00, 10:30, 14:00, 17:30, 21:00, 24:30, 28:00, 31:30, 35:00, 38:30, 42:00, 45:30, 49:00, 52:30, 56:00, 1:03:30, 1:07:00, 1:10:30, 1:14:00, 1:17:30, 1:21:00, 1:24:30, 1:28:00, 1:31:30, 1:35:00, 1:38:30, 1:42:00, 1:45:30, 1:49:00, 1:52:30, 1:56:00, 2:03:30, 2:07:00, 2:10:30, 2:14:00, 2:17:30, 2:21:00, 2:24:30, 2:28:00, 2:31:30, 2:35:00, 2:38:30, 2:42:00, 2:45:30, 2:49:00, 2:52:30, 2:56:00, 3:03:30, 3:07:00, 3:10:30, 3:14:00, 3:17:30, 3:21:00, 3:24:30, 3:28:00, 3:31:30, 3:35:00, 3:38:30, 3:42:00, 3:45:30, 3:49:00, 3:52:30, 3:56:00, 4:03:30, 4:07:00, 4:10:30, 4:14:00, 4:17:30, 4:21:00, 4:24:30, 4:28:00, 4:31:30, 4:35:00, 4:38:30, 4:42:00, 4:45:30, 4:49:00, 4:52:30, 4:56:00, 5:03:30, 5:07:00, 5:10:30, 5:14:00, 5:17:30, 5:21:00, 5:24:30, 5:28:00, 5:31:30, 5:35:00, 5:38:30, 5:42:00, 5:45:30, 5:49:00, 5:52:30, 5:56:00
+
+0:25, 7:30, 15:00, 22:30, 30:00, 37:30, 45:00, 52:30, 1:00:00, 1:07:30, 1:15:00, 1:22:30, 1:30:00, 1:37:30, 1:45:00, 1:52:30, 2:00:00, 2:07:30, 2:15:00, 2:22:30, 2:30:00, 2:37:30, 2:45:00, 2:52:30, 3:00:00, 3:07:30, 3:15:00, 3:22:30, 3:30:00, 3:37:30, 3:45:00, 3:52:30, 4:00:00, 4:07:30, 4:15:00, 4:22:30, 4:30:00, 4:37:30, 4:45:00, 4:52:30, 5:00:00, 5:07:30, 5:15:00, 5:22:30, 5:30:00, 5:37:30, 5:45:00, 5:52:30, 6:00:00, 6:07:30, 6:15:00, 6:22:30, 6:30:00, 6:37:30, 6:45:00, 6:52:30, 7:00:00, 7:07:30, 7:15:00, 7:22:30, 7:30:00, 7:37:30, 7:45:00, 7:52:30, 8:00:00, 8:07:30, 8:15:00, 8:22:30, 8:30:00, 8:37:30, 8:45:00, 8:52:30, 9:00:00, 9:07:30, 9:15:00, 9:22:30, 9:30:00, 9:37:30, 9:45:00, 9:52:30, 10:00:00, 10:07:30, 10:15:00, 10:22:30, 10:30:00, 10:37:30, 10:45:00, 10:52:30, 11:00:00, 11:07:30, 11:15:00, 11:22:30, 11:30:00, 11:37:30, 11:45:00, 11:52:30
+
+http://www.allure.com/
+http://beauty.about.com/od/allaboutyoureyes/qt/bigeyes.htm
+http://www.howcast.com/guides/600-how-to-get-a-tattoo/
+
+http://akb48awesome.blogspot.co.uk/2016/11/161110-akb48.html
+
+http://stream10.tv.zdn.vn/streaming/9422011389a6f4259b5b3f6114587387/58147894/Video480/2015/0429/da/d621a22179e5660b0e556b662b65df98.mp4?format=f480&device=other
+http://www.nogizaka46.com/video/index.php?bclid=2syunen
+
+http://hls.vcmedia.vn/vtv/ownw8ttzjcwzpvkgxkvrk1yp3poiy0/2016/11/01/01112016-phim-v1-1478013319531-25e07.mp4/master.m3u8
+
+4 46 55
+4 52 21
+
+Code lách bản quyền hình ảnh-âm thanh phim cho người mới.
+ffmpeg -y -i "{input}.*" -i "{input}.*" -i "Filter_HD_Pixel10.png" -filter_complex "[0:v]setpts=PTS/1.1, scale=4*iw:-1, crop=iw/4:ih/4, boxblur=5:1, scale=854:480[v1],[v1][2:v]overlay=0:0[vmain];[1:v] setpts=PTS/1.1, scale=530:320,pad=538:328:4:4:color=white, boxblur=1:0[vo];[vmain][vo] overlay=10:8, hue=s=1.5[vout];[0:a] atempo=1.1, aecho=0.8:0.88:6:0.4, aecho=0.4:0.66:2:0.2,aecho=0.8:0.88:60:0.4, equalizer = f = 1000: width_type = q: width = 1: g = 2,equalizer = f = 100: width_type = q: width = 2: g = -5 ,volume=1.5 [aout]" -map "[vout]" -map "[aout]" -vcodec libx264 -pix_fmt yuv420p -r 30 -g 60 -b:v 680k -profile:v main -level 3.1 -acodec libmp3lame -b:a 128k -ar 44100 -metadata title="" -metadata artist="" -metadata album_artist="" -metadata album="" -metadata date="" -metadata track="" -metadata genre="" -metadata publisher="" -metadata encoded_by="" -metadata copyright="" -metadata composer="" -metadata performer="" -metadata TIT1="" -metadata TIT3="" -metadata disc="" -metadata TKEY="" -metadata TBPM="" -metadata language="eng" -metadata encoder="" -threads 0 -preset superfast "{output}.mp4"
+Ý nghĩa các con số cơ bản:
+Filter_HD_Pixel10.png : Ảnh làm mờ video
+- crop=iw/4:ih/4: Tỷ lệ crop video nền, số 4 có nghĩa là phóng to 4 lần
+- boxblur=5:1: Đây là độ mờ của video nền, cái này các tự tìm hiểu, hình như là tối đa 8:8
+- scale=854:480: Đây là định dạng đầu ra của video nền - 480p. Cái này phải khớp với định dạng của ảnh làm mờ "Filter_HD_Pixel10.png", ở đây ảnh có định dạng 480p nên video đầu ra phải là 480p.
+- setpts=PTS/1.1 : tăng tốc độ chạy video lên 1.1, cái này phải khớp với tốc độ âm thanh atempo=1.1 ở đoạn code lách âm.
+- scale=530:320,pad=538:328:4:4:color=white : 530:320 là chiều dài, rộng của video chính, video càng nặng bảng quyền thì các bác chỉnh thông số này càng nhỏ xuống là được, 4:4 là độ rộng của viền video, white làm màu viền, 538:328 là 530+4x2 và 320+4x2. Các số này đều có thể chỉnh sửa được, nhưng phải khớp nhau.
+- overlay=10:8 Là vị trí đặt video chính, ở đây mình chọn góc phía trên bên trái nên đặt là 10:8, nếu bác nào muốn đặt phía dưới bên phải thì là 316:152, vì video nền định dạng là 854:480 nên nếu chuyển video xuống góc dưới bên phải thì 854-538=316, 480-328=152, con số 316:152 ở đây ra đấy. Các bác có thể thay đổi thông số này sao cho thích thì thôi.
+- atempo=1.1, aecho=0.8:0.88:6:0.4, aecho=0.4:0.66:2:0.2,aecho=0.8:0.88:60:0.4 : Đây là code lách âm thanh, còn mạnh nữa thì thêm đoạn này vào aecho=0.8:0.9:1000:0.3,aecho=0.8:0.9:1000|1800:0.3|0.25
+Các bác muốn thêm chữ kêu gọi theo dõi hay like hay v.v lên video thi chỉ cần vào trang sửa ảnh online https://pixlr.com/editor/ rồi chỉnh sửa ảnh Filter_HD_Pixel10.png tại đó các bác thêm chữ các bạn muốn vào. Khi xuất ảnh nhớ xuất đuôi png.
+Phần mềm render MyRenderTools 1.0.0.4 cho bác nào chưa biết.
+- Link ảnh Filter_HD_Pixel10.png : http://2.pi/ k.vn/20163c21cfcf-b865-4c88-8ffe-aa2208085ae0.png
+tải ảnh về các bác nhớ đặt tên là Filter_HD_Pixel10
+Ảnh phải là định dạng png đấy mn.
+Hết.
+Tiện thể xin key, bác nào có key ngon cho em xin vào ib với, dạo đói quá.
+https://www.youtube.com/watch?v=vkYA5JmRWk8
+18 15 55 16
