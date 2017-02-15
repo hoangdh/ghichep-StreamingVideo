@@ -4,8 +4,8 @@ mkdir -p ~/ffmpeg_sources
 mkdir -p ~/ffmpeg_build
 mkdir -p ~/bin
 
-sudo apt-get update
-sudo apt-get -y install autoconf automake build-essential libass-dev libfreetype6-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo zlib1g-dev libssl-dev
+apt-get update -y
+apt-get -y install autoconf automake build-essential libass-dev libfreetype6-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo zlib1g-dev libssl-dev
   
 # yasm
 cd ~/ffmpeg_sources
@@ -81,9 +81,13 @@ make clean
 
 ## openssl
 cd ~/ffmpeg_sources
-wget https://www.openssl.org/source/openssl-fips-2.0.14.tar.gz
-tar -xvzf openssl-fips-2.0.14.tar.gz
-cd openssl-fips-2.0.14/
+# wget https://www.openssl.org/source/openssl-fips-2.0.14.tar.gz
+# tar -xvzf openssl-fips-2.0.14.tar.gz
+# cd openssl-fips-2.0.14/
+
+wget https://www.openssl.org/source/openssl-1.1.0c.tar.gz
+tar -xvzf openssl-1.1.0c.tar.gz
+cd openssl-1.1.0c/
 ./config --prefix=/usr
 sudo make
 sudo checkinstall

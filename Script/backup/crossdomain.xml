@@ -1,0 +1,4 @@
+<cross-domain-policy>
+<allow-access-from domain="*" secure="false"/>
+<site-control permitted-cross-domain-policies="all"/>
+</cross-domain-policy>

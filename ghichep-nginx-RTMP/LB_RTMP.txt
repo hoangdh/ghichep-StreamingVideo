@@ -1,0 +1,45 @@
+// Phân tải RTMP
+
+exec ffmpeg -re -i rtmp://localhost/live/$name -c:a libfdk_aac -b:a 128k -c:v libx264 -b:v 512K -f flv rtmp://192.168.100.201/live/$name;
+
+// Đẩy stream cùng tên sang server Relay
+
+Ý tưởng:
+                                        |            |
+                                        |Server Relay|
+                                        |    NGINX   |
+       |Server Orginal|
+  PLAY: HAProxy: 1935
+  POST: Nginx: 1936
+                                        |            |
+                                        |Server Relay|
+                                        |    NGINX   |
+
+Cấu hình HAProxy:
+
+listen stats
+    bind *:1234
+    mode http
+    stats enable
+    stats refresh 5s
+    stats show-node
+    stats hide-version
+    stats realm Haproxy\ Statistics
+    stats uri /
+    stats auth Username:Password
+    
+frontend ft_rtpm
+     bind *:1935
+     mode tcp
+     maxconn 1000
+     default_backend bk_rtmp
+ 
+backend bk_rtmp 
+     mode tcp
+     balance roundrobin
+     stick store-request src
+     stick-table type ip size 200k expire 20m
+     stick on src
+     # source 0.0.0.0 usesrc clientip
+     server media01 192.168.100.201:1935 check maxconn 500 weight 10
+     server media02 192.168.100.195:1935 check maxconn 500 weight 10
