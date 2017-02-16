@@ -28,7 +28,7 @@
 OS: Ubuntu 16.04
 RAM: 2GB
 Cores: 2
-Bandwith: 1Gb/s
+Bandwidth: 1Gb/s
 eth0: 192.168.100.197
 Gateway: 192.168.100.1
 NETWORK: 192.168.100.0/24
