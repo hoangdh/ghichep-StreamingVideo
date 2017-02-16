@@ -139,7 +139,7 @@ rtmp {
 
 Băng thông cho HLS và DASH khá tốn, play một stream chất lượng HD thì dung lượng >= 1MB/s cho một stream.
 
-Thêm block `http` cấu hình
+Thêm block `http` và file cấu hình `nginx.conf`
 
 ```
 http {
@@ -206,9 +206,10 @@ application live {
                     record off;
                     # # Turn on HLS
                     hls on;
+                    hls_nested;
                     hls_path /etc/nginx/html/hls;
                     hls_fragment 3;
-                    hls_playlist_length 6;
+                    hls_playlist_length 10;
                 }
 ```
 
@@ -230,11 +231,12 @@ Ví dụ thêm vào app `live`
 application live {
                     live on;
                     record off;
-                    # # Turn on HLS
-                    hls on;
-                    hls_path /etc/nginx/html/hls;
-                    hls_fragment 3;
-                    hls_playlist_length 6;
+                    # # Turn on DASH
+                    dash on;
+                    dash_nested;
+                    dash_path /etc/nginx/html/dash;
+                    dash_fragment 3;
+                    dash_playlist_length 10;
                 }
 ```
 
@@ -268,6 +270,7 @@ rtmp {
                     hls_fragment 3;
                     hls_playlist_length 10;
                     hls_nested on;
+                    # # Turn on DASH
                     dash on;
                     dash_nested on;
                     dash_path /etc/nginx/html/dash;
