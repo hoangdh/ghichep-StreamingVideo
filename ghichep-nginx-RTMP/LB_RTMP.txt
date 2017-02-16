@@ -1,8 +1,6 @@
 // Phân tải RTMP
 
-exec ffmpeg -re -i rtmp://localhost/live/$name -c:a libfdk_aac -b:a 128k -c:v libx264 -b:v 512K -f flv rtmp://192.168.100.201/live/$name;
-
-// Đẩy stream cùng tên sang server Relay
+exec ffmpeg -re -i rtmp://localhost/live/$name -c copy -f flv rtmp://192.168.100.201/live/$name; // Đẩy stream cùng tên sang server Relay
 
 Ý tưởng:
                                         |            |
@@ -43,3 +41,26 @@ backend bk_rtmp
      # source 0.0.0.0 usesrc clientip
      server media01 192.168.100.201:1935 check maxconn 500 weight 10
      server media02 192.168.100.195:1935 check maxconn 500 weight 10
+
+     
+     
+// Phân tải HLS/DASH
+
+Cách 1: // Thêm vào file cấu hình HAProxy trên
+frontend ft_hls
+     bind *:80
+     mode http
+     maxconn 1000
+     default_backend bk_hls
+
+backend bk_hls 
+     mode http
+     balance roundrobin
+     server media01 192.168.100.196:80 check maxconn 500 weight 10
+     server media02 192.168.100.195:80 check maxconn 500 weight 10
+
+Cách 2:     
+     
+- 1 Server (srv1) nhận stream từ người dùng (NGINX-RTMP)
+- Chia sẻ folder HLS/DASH của srv1 cho các Web server
+- Phân tải cho các Web server
