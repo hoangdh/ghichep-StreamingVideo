@@ -6,11 +6,17 @@
 
 [2. Cài đặt và cấu hình ](#2)
 
-- [2.1 Cấu hình RTMP ](#2.1)
+- [2.1 Biên dịch NIGNX-RTMP ](#2.1)
+
+- [2.2 Cấu hình RTMP ](#2.2)
+
+- [2.3 Cấu hình HTTP Server cho HLS và DASH ] (#2.3)
 	
-- [2.2 Cấu hình HLS ](#2.2)
+- [2.4 Cấu hình HLS ](#2.4)
 	
-- [2.3 Cấu hình DASH ](#2.3)
+- [2.5 Cấu hình DASH ](#2.5)
+	
+- [2.6 File cấu hình hoàn chỉnh ](#2.6)
 	
 [3. Kết luận ](#3)
 
@@ -32,7 +38,7 @@ NETWORK: 192.168.100.0/24
 
 ### 2. Cài đặt và cấu hình <a name="2"></a>
 
-#### 2.1 Cài đặt <a name="2.1"></a>
+#### 2.1 Biên dịch NIGNX-RTMP <a name="2.1"></a>
 
 **Cài đặt các trình biên dịch:**
 
@@ -41,7 +47,7 @@ apt-get update -y
 apt-get install build-essential libpcre3 libpcre3-dev libssl-dev git wget dpkg-dev zlib1g-dev unzip  -y
 ```
 
-**Tải các gói cài đặt cần thiết: **
+**Tải các gói cài đặt cần thiết:**
 
 #### NGINX và giải nén
 
@@ -232,7 +238,7 @@ application live {
                 }
 ```
 
-### 3. File cấu hình hoàn chỉnh <a name="3"></a>
+#### 2.6 File cấu hình hoàn chỉnh <a name="2.6"></a>
 
 ```
 user  nginx;
@@ -326,7 +332,9 @@ http {
 
 ### 3. Kết luận <a name="3"></a>
 
-Trên đây là một số hướng dẫn về cấu hình một streamming server sử dụng phần mềm mã nguồn mở. Hy vọng có thể giúp các bạn hiểu thêm về công nghệ đang "Hót" trên thị trường trong vài năm trở lại đây. Các bạn muốn tìm hiểu sâu hơn về lĩnh vực này vui lòng tìm hiểu trang chủ. 
+Trên đây là một số hướng dẫn về cấu hình một streamming server sử dụng phần mềm mã nguồn mở. Hy vọng có thể giúp các bạn hiểu thêm về công nghệ đang "Hót hòn họt" trên thị trường trong vài năm trở lại đây. Các bạn muốn tìm hiểu sâu hơn về lĩnh vực này vui lòng tìm hiểu trang chủ.
+
+Một vài kỹ thuật nâng cao như Secure stream, HA stream sẽ được cập nhật trong thời gian tới. Cảm ơn các bạn đã quan tâm!
 
 - http://nginx-rtmp.blogspot.com
 - https://github.com/arut/nginx-rtmp-module/wiki/Getting-started-with-nginx-rtmp
