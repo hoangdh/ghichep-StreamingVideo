@@ -85,9 +85,9 @@ cd ~/ffmpeg_sources
 # tar -xvzf openssl-fips-2.0.14.tar.gz
 # cd openssl-fips-2.0.14/
 
-wget https://www.openssl.org/source/openssl-1.1.0c.tar.gz
-tar -xvzf openssl-1.1.0c.tar.gz
-cd openssl-1.1.0c/
+wget wget https://www.openssl.org/source/openssl-1.1.0e.tar.gz
+tar -xvzf openssl-1.1.0e.tar.gz
+cd openssl-*/
 ./config --prefix=/usr
 sudo make
 sudo checkinstall

@@ -27,6 +27,24 @@ cat > /etc/nginx/html/crossdomain.xml << H2
 </cross-domain-policy>
 H2
 
+cat > /lib/systemd/system/nginx.service <<H2
+[Unit]
+Description=The NGINX HTTP and reverse proxy server
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t
+ExecStart=/usr/sbin/nginx
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+H2
+
 cat > /etc/nginx/nginx.conf  << H2
 #user  nobody;
 worker_processes  auto;
@@ -45,6 +63,8 @@ rtmp {
     server {
             listen 1935;
             chunk_size 4096;
+            notify_method get;
+            
              application vod {
                play /etc/nginx/html/vod;
             }
@@ -52,6 +72,7 @@ rtmp {
             application live {
                     live on;
                     record off;
+                    # on_publish http://localhost/on_publish;
                     # # Turn on HLS
                     hls on;
                     hls_path /etc/nginx/html/live;
@@ -94,7 +115,7 @@ http {
     server {
         listen       80;
         server_name  localhost;
-
+        server_tokens off;
         #charset koi8-r;
 
         access_log /var/log/nginx/access_log combined;
@@ -103,7 +124,63 @@ http {
             root   html;
             index  index.html index.htm;
         }
+        location /live {
+            # Disable cache
+            add_header 'Cache-Control' 'no-cache';
 
+            # CORS setup
+            add_header 'Access-Control-Allow-Origin' '*' always;
+            add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+            add_header 'Access-Control-Allow-Headers' 'Range';
+
+            # allow CORS preflight requests
+            if ($request_method = 'OPTIONS') {
+                add_header 'Access-Control-Allow-Origin' '*';
+                add_header 'Access-Control-Allow-Headers' 'Range';
+                add_header 'Access-Control-Max-Age' 1728000;
+                add_header 'Content-Type' 'text/plain charset=UTF-8';
+                add_header 'Content-Length' 0;
+                return 204;
+            }
+
+            types {
+                application/dash+xml mpd;
+                application/vnd.apple.mpegurl m3u8;
+                video/mp2t ts;
+            }
+            root html;
+        }
+        # # Secure VOD
+        # location /videos {
+            # secure_link_secret livestream;
+            # if ($secure_link = "") { return 403; }
+
+            # rewrite ^ /vod/$secure_link;
+        # }
+
+        # location /vod {
+            # internal;
+            # root /etc/nginx/html;
+        # }
+        # Secure RTMP on publish. (on_play,...)
+        location /on_publish {
+
+            # set connection secure link
+            secure_link $arg_st,$arg_e;
+            secure_link_md5 ByHoangDH$arg_app/$arg_name$arg_e;
+
+            # bad hash
+            if ($secure_link = "") {
+                return 501;
+            }
+
+            # link expired
+            if ($secure_link = "0") {
+                return 502;
+            }
+
+            return 200;
+        }
         #error_page  404              /404.html;
 
         # redirect server error pages to the static page /50x.html
@@ -115,3 +192,6 @@ http {
     }
 }
 H2
+
+systemctl enable nginx
+systemctl start nginx

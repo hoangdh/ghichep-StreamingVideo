@@ -1,7 +1,14 @@
+// Nếu LB RTMP dùng pull
+// Nếu LB HLS dùng push
+
 // Phân tải RTMP
+C1:
+exec ffmpeg -re -i rtmp://localhost/live/$name -c copy -f flv rtmp://192.168.100.201/live/$name; // Đẩy stream cùng tên sang server 
 
-exec ffmpeg -re -i rtmp://localhost/live/$name -c copy -f flv rtmp://192.168.100.201/live/$name; // Đẩy stream cùng tên sang server Relay
+Relay
+C2:
 
+pull rtmp://srv-orginal;
 Ý tưởng:
                                         |            |
                                         |Server Relay|
