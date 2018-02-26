@@ -45,7 +45,7 @@ events {
     worker_connections  1024;
 }
 
-pid       /var/run/nginx.pid;
+# pid       /var/run/nginx.pid;
 
 # RTMP configuration
 rtmp {
@@ -67,10 +67,10 @@ rtmp {
             
         }
         # # Record
-        record all;
-        record_path /mnt/stream/vod/;
-        record_suffix  -%d-%b-%y-%T.flv;
-        record_notify on;
+        # record all;
+        # record_path /mnt/stream/vod/;
+        # record_suffix  -%d-%b-%y-%T.flv;
+        
         
     }
 }

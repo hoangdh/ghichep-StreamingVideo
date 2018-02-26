@@ -8,6 +8,14 @@ wget http://nginx.org/download/nginx-1.10.1.tar.gz
 tar -xf nginx-1.10.1.tar.gz
 cd nginx-1.10.1
 
+# apt-get update -y
+# apt-get install build-essential libpcre3 libpcre3-dev libssl-dev git wget dpkg-dev zlib1g-dev unzip -y
+
+# git clone https://github.com/arut/nginx-rtmp-module.git
+# wget http://nginx.org/download/nginx-1.8.1.tar.gz
+# tar -xf nginx-1.8.1.tar.gz
+# cd nginx-1.8.1
+
 ./configure --user=nginx --group=nginx --add-module=../nginx-rtmp-module/ --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6
 
 make
@@ -34,11 +42,11 @@ After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
 Type=forking
-PIDFile=/run/nginx.pid
+PIDFile=/var/run/nginx.pid
 ExecStartPre=/usr/sbin/nginx -t
 ExecStart=/usr/sbin/nginx
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s QUIT $MAINPID
+ExecReload=/bin/kill -s HUP \$MAINPID
+ExecStop=/bin/kill -s QUIT \$MAINPID
 PrivateTmp=true
 
 [Install]
@@ -98,9 +106,9 @@ http {
     include       mime.types;
     default_type  application/octet-stream;
 
-    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-    #                  '$status $body_bytes_sent "$http_referer" '
-    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+    #log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+    #                  '$status \$body_bytes_sent "\$http_referer" '
+    #                  '"\$http_user_agent" "\$http_x_forwarded_for"';
 
     #access_log  logs/access.log  main;
 
@@ -134,7 +142,7 @@ http {
             add_header 'Access-Control-Allow-Headers' 'Range';
 
             # allow CORS preflight requests
-            if ($request_method = 'OPTIONS') {
+            if (\$request_method = 'OPTIONS') {
                 add_header 'Access-Control-Allow-Origin' '*';
                 add_header 'Access-Control-Allow-Headers' 'Range';
                 add_header 'Access-Control-Max-Age' 1728000;
@@ -166,16 +174,16 @@ http {
         location /on_publish {
 
             # set connection secure link
-            secure_link $arg_st,$arg_e;
-            secure_link_md5 ByHoangDH$arg_app/$arg_name$arg_e;
+            secure_link \$arg_st,\$arg_e;
+            secure_link_md5 ByHoangDH\$arg_app/\$arg_name\$arg_e;
 
             # bad hash
-            if ($secure_link = "") {
+            if (\$secure_link = "") {
                 return 501;
             }
 
             # link expired
-            if ($secure_link = "0") {
+            if (\$secure_link = "0") {
                 return 502;
             }
 

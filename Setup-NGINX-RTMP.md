@@ -10,7 +10,7 @@
 
 - [2.2 Cấu hình RTMP ](#2.2)
 
-- [2.3 Cấu hình HTTP Server cho HLS và DASH ] (#2.3)
+- [2.3 Cấu hình HTTP Server cho HLS và DASH ](#2.3)
 	
 - [2.4 Cấu hình HLS ](#2.4)
 	
@@ -311,7 +311,35 @@ http {
             root   html;
             index  index.html index.htm;
         }
+		
+		# # Player get M3U8
+        location /hls {
+            # Disable cache
+            add_header 'Cache-Control' 'no-cache';
 
+            # CORS setup
+            add_header 'Access-Control-Allow-Origin' '*' always;
+            add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+            add_header 'Access-Control-Allow-Headers' 'Range';
+
+            # allow CORS preflight requests
+            if ($request_method = 'OPTIONS') {
+                add_header 'Access-Control-Allow-Origin' '*';
+                add_header 'Access-Control-Allow-Headers' 'Range';
+                add_header 'Access-Control-Max-Age' 1728000;
+                add_header 'Content-Type' 'text/plain charset=UTF-8';
+                add_header 'Content-Length' 0;
+                return 204;
+            }
+
+            types {
+                application/dash+xml mpd;
+                application/vnd.apple.mpegurl m3u8;
+                video/mp2t ts;
+            }
+            root html;
+        }		
+		
         #error_page  404              /404.html;
 
         # redirect server error pages to the static page /50x.html
