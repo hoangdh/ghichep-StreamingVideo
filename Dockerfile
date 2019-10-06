@@ -1,5 +1,7 @@
 FROM nginx:1.16.1-alpine
 
+LABEL maintainer="HoangDH - <github.com/hoangdh>"
+
 ENV NGINX_VER 1.16.1
 ENV DEP git build-base
 
