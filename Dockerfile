@@ -17,10 +17,12 @@ RUN apk update && \
 	make modules && \
 	cp objs/ngx_rtmp_module.so /etc/nginx/modules/ && \
 	sed -i '7iload_module modules/ngx_rtmp_module.so;' /etc/nginx/nginx.conf && \
-	mkdir -p /var/cache/nginx/client_temp \
-	&& chown -R nginx:nginx /var/cache/nginx/ \
+	mkdir -p /var/cache/nginx/client_temp /var/www/hls \
+	&& chown -R nginx:nginx /var/cache/nginx/ /var/www/hls \
 	&& apk del ${DEP} \
 	&& rm -rf /work /var/cache/apk/*
+	
+COPY nginx-rtmp/nginx.conf /etc/nginx/
 
 EXPOSE 80 443 1935
 
