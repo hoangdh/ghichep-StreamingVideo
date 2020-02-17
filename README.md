@@ -8,7 +8,9 @@ HTTP Live Streaming (hay còn được biết đến là HLS) là một cách tr
 
 Nếu stream được chia thành nhiều chất lượng khác nhau (480p, 720p), thì player sẽ tự động lựa chọn chất lượng video tốt nhất để phát dựa theo tình trạng băng thông mạng. Thuật ngữ này là Adaptive Streaming (Thích nghi với điều kiện).
 
-<img src="https://s3-ap-southeast-1.amazonaws.com/kipalog.com/5lcn44htxb_image.png" />
+<img src="images/hls.png" />
+
+Tổng quan: https://docs.google.com/document/d/1SQU50h-ybMNwexiOL3QWOSg7t3PxAPg1lNbfTzOVe9k/edit?usp=sharing
 
 Powered by <a href="http://meditech.vn">MediTech,. JSC</a> - (C) HoangDH
 
