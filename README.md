@@ -199,8 +199,8 @@ Mặc định, thư mục public của nginx ở CentOS
 
 <img src="http://image.prntscr.com/image/57939a7e0e6d4510a74d75ea03bb3fac.png" />
 
-=======
-<img src="http://image.prntscr.com/image/57939a7e0e6d4510a74d75ea03bb3fac.png"/>
-
 Địa chỉ stream của tôi: http://192.168.100.192/bai-hat-abc/playlist.m3u8
 
+Tham khảo xây dựng 1 máy chủ Live streaming tại [đây](https://github.com/hoangdh/ghichep-StreamingVideo/blob/master/Setup-NGINX-RTMP.md).
+
+Cảm ơn bạn đã đọc tới dòng này!
